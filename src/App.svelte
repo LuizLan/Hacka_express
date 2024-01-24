@@ -1,19 +1,21 @@
 <script>
+import Moises from "moises/sdk.js"
+
 import Playlist from './Playlist.svelte';
 import TrackDetails from './TrackDetails.svelte';
 import PLaybackControls from './PlaybackControls.svelte';
-import Settings from './Settings.svelte';
+import Settings from './Settings.svelte'; 
 
-const ipc = require('electron').ipcRenderer;
-const fs = require('fs');
-const path = require('path');
-const storage = require('electron-json-storage');
-const mm = require('music-metadata');
-const chokidar = require('chokidar');
+const ipc = require('electron').ipcRenderer; //carrega o modulo de comunicaçao com o processo principal
+const fs = require('fs'); //carrega o modulo de manipulaçao de arquivos
+const path = require('path'); 
+const storage = require('electron-json-storage'); //carrega onde ficarao as configuraçoes locais do app(electron)
+const mm = require('music-metadata'); //biblioteca para ler os metadados das musicas
+const chokidar = require('chokidar'); //biblioteca para monitorar mudanças no diretorio de musicas
 
 let watcher;
 
-storage.getDataPath();
+storage.getDataPath(); 
 
 let trackName = 'Unknown';
 let trackArtist = 'Unknown';
@@ -97,7 +99,7 @@ storage.has('theme', function (error, hasKey) {
     }
 });
 
-var walkSync = function (dir, filelist) {
+var walkSync = function (dir, filelist) { // funçao responsavel por carregar a lista de musica e atualizar ela se necessario
     files = fs.readdirSync(dir);
     filelist = filelist || [];
     files.forEach(function (file) {
@@ -147,6 +149,11 @@ async function parseFiles(audioFiles) {
 
 async function scanDir(filePath) {
     if (!filePath || filePath == 'undefined') return;
+
+    //aqui mandamos os arquivos para o music.ai
+
+
+    //
 
     watcher = chokidar.watch(filePath, {
         ignored: /[\/\\]\./,
@@ -527,6 +534,8 @@ function randomize(array) {
     return array;
 }
 
+//PLAYER DE MUSICA EM SI
+
 var Player = function (playlist, index) {
     this.playlist = playlist;
     this.index = index;
@@ -542,9 +551,9 @@ Player.prototype = {
         var sound;
 
         index = typeof index === 'number' ? index : self.index;
-        var data = self.playlist[index];
-
-        if (data.howl) {
+        var data = self.playlist[index]; // pega os dados da musica
+        
+        if (data.howl) { 
             sound = data.howl;
         } else {
             sound = data.howl = new Howl({

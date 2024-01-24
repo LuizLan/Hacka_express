@@ -1,0 +1,20 @@
+package-lock.json
+/public/build/
+
+.DS_Store
+
+# Dependencies
+/node_modules
+
+# IDE - VSCode
+.vscode/*
+.idea/*
+!.vscode/launch.json
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+path.txt
+theme.txt
